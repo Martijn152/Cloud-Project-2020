@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item android:title="@string/menu_hunting">
+        <menu>
+
+            <item
+                android:id="@+id/nav_map"
+                android:icon="@android:drawable/ic_dialog_map"
+                android:title="@string/menu_map" />
+            <item
+                android:id="@+id/nav_hunt"
+                android:icon="@android:drawable/ic_menu_mylocation"
+                android:title="@string/menu_hunt" />
+            <item
+                android:id="@+id/nav_gallery"
+                android:icon="@drawable/ic_menu_gallery"
+                android:title="@string/menu_gallery" />
+        </menu>
+    </item>
+    <item android:title="@string/menu_personal">
+        <menu>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@android:drawable/ic_menu_myplaces"
+                android:title="@string/menu_profile" />
+            <item
+                android:id="@+id/nav_settings"
+                android:icon="@android:drawable/ic_menu_manage"
+                android:title="@string/menu_settings" />
+        </menu>
+    </item>
+
+</menu>
