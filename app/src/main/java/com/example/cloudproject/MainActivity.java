@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.cloudproject.models.Hunt;
+import com.example.cloudproject.ui.huntlist.HuntListFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -25,7 +27,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements HuntListFragment.OnListFragmentInteractionListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private static final int CAMERA_REQUEST = 1888;
@@ -45,11 +47,11 @@ public class MainActivity extends AppCompatActivity {
                     requestPermissions(new String[]{Manifest.permission.CAMERA}, MY_CAMERA_PERMISSION_CODE);
                 } else {
                     Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, CAMERA_REQUEST);
-
-                    }
+                    startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
                 }
+
+            }
 
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -57,8 +59,10 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setDrawerLayout(drawer).build();
+
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_map, R.id.nav_hunt, R.id.nav_hunt_list)
+                .setDrawerLayout(drawer)
+                .build();
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
-           // imageView.setImageBitmap(photo);
+            // imageView.setImageBitmap(photo);
 
         }
     }
@@ -105,4 +109,10 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+
+    @Override
+    public void onListFragmentInteraction(Hunt item) {
+
+    }
 }
+

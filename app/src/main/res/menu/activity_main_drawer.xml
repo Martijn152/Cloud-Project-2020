@@ -11,6 +11,10 @@
                 android:icon="@android:drawable/ic_dialog_map"
                 android:title="@string/menu_map" />
             <item
+                android:id="@+id/nav_hunt_list"
+                android:icon="@android:drawable/ic_menu_sort_by_size"
+                android:title="@string/menu_hunt_list" />
+            <item
                 android:id="@+id/nav_hunt"
                 android:icon="@android:drawable/ic_menu_mylocation"
                 android:title="@string/menu_hunt" />

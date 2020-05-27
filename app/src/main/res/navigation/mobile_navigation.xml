@@ -9,25 +9,13 @@
         android:id="@+id/nav_home"
         android:name="com.example.cloudproject.ui.home.HomeFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home">
+        tools:layout="@layout/fragment_home" />
 
-        <action
-            android:id="@+id/action_HomeFragment_to_HomeSecondFragment"
-            app:destination="@id/nav_home_second" />
-    </fragment>
     <fragment
-        android:id="@+id/nav_home_second"
-        android:name="com.example.cloudproject.ui.home.HomeSecondFragment"
-        android:label="@string/home_second"
-        tools:layout="@layout/fragment_home_second">
-        <action
-            android:id="@+id/action_HomeSecondFragment_to_HomeFragment"
-            app:destination="@id/nav_home" />
-
-        <argument
-            android:name="myArg"
-            app:argType="string" />
-    </fragment>
+        android:id="@+id/nav_map"
+        android:name="com.example.cloudproject.ui.map.MapFragment"
+        android:label="@string/menu_map"
+        tools:layout="@layout/fragment_map" />
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -36,8 +24,14 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.cloudproject.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_hunt"
+        android:name="com.example.cloudproject.ui.hunt.HuntFragment"
+        android:label="@string/menu_hunt"
+        tools:layout="@layout/fragment_hunt" />
+
+    <fragment
+        android:id="@+id/nav_hunt_list"
+        android:name="com.example.cloudproject.ui.huntlist.HuntListFragment"
+        android:label="@string/menu_hunt_list"
+        tools:layout="@layout/fragment_hunt_list" />
 </navigation>
