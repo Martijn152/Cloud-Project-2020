@@ -8,6 +8,8 @@
 - Design login and signup
 - Implement database in cloud
 - Finish database design
+- Look into the camera function Android
+- Look into storing photographs
 
 
 
