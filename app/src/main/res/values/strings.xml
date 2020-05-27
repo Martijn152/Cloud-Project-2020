@@ -12,10 +12,14 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_hunting">Hunting</string>
     <string name="menu_map">Map</string>
-    <string name="menu_hunt">Hunt</string>
+    <string name="menu_hunt">Current Hunt</string>
+    <string name="menu_hunt_list">Hunt List</string>
     <string name="menu_personal">Personal</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_profile">Profile</string>
 
     <string name="home_second">Home Second</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

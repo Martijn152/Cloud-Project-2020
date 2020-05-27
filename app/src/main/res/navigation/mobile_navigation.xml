@@ -24,8 +24,14 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.cloudproject.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/nav_hunt"
+        android:name="com.example.cloudproject.ui.hunt.HuntFragment"
+        android:label="@string/menu_hunt"
+        tools:layout="@layout/fragment_hunt" />
+
+    <fragment
+        android:id="@+id/nav_hunt_list"
+        android:name="com.example.cloudproject.ui.huntlist.HuntListFragment"
+        android:label="@string/menu_hunt_list"
+        tools:layout="@layout/fragment_hunt_list" />
 </navigation>
