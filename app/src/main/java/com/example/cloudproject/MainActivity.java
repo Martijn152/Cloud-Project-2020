@@ -65,6 +65,11 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
 
     @Override
     public void onListFragmentInteraction(Hunt item) {
+        //Do something with the item here
+
+        //We want to open another fragment and pass the item to it, so it know what to display
+        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        //navController.navigate(R.id.nav_map);
 
     }
 }

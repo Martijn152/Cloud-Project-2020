@@ -12,10 +12,10 @@ import com.example.cloudproject.R;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HuntFragment#newInstance} factory method to
+ * Use the {@link HuntInformationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HuntFragment extends Fragment {
+public class HuntInformationFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -25,7 +25,7 @@ public class HuntFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public HuntFragment() {
+    public HuntInformationFragment() {
         // Required empty public constructor
     }
 
@@ -35,11 +35,11 @@ public class HuntFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HuntFragment.
+     * @return A new instance of fragment HuntInformationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static HuntFragment newInstance(String param1, String param2) {
-        HuntFragment fragment = new HuntFragment();
+    public static HuntInformationFragment newInstance(String param1, String param2) {
+        HuntInformationFragment fragment = new HuntInformationFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -60,6 +60,6 @@ public class HuntFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_hunt, container, false);
+        return inflater.inflate(R.layout.fragment_hunt_information, container, false);
     }
 }
