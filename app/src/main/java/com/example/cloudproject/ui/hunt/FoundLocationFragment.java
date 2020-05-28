@@ -1,6 +1,5 @@
 package com.example.cloudproject.ui.hunt;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -11,28 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.cloudproject.MainActivity;
 import com.example.cloudproject.R;
 import com.example.cloudproject.models.Hunt;
-import com.example.cloudproject.models.Location;
-
-import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link CurrentHuntFragment#newInstance} factory method to
+ * Use the {@link FoundLocationFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CurrentHuntFragment extends Fragment {
+public class FoundLocationFragment extends Fragment {
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 
+    // TODO: Rename and change types of parameters
     private Hunt hunt;
     private int currentLocationNumber;
 
-    public CurrentHuntFragment() {
+    public FoundLocationFragment() {
         // Required empty public constructor
     }
 
@@ -42,48 +38,30 @@ public class CurrentHuntFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment HuntFragment.
+     * @return A new instance of fragment FoundLocationFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static CurrentHuntFragment newInstance(String param1, String param2) {
-        CurrentHuntFragment fragment = new CurrentHuntFragment();
+    public static FoundLocationFragment newInstance(String param1, String param2) {
+        FoundLocationFragment fragment = new FoundLocationFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         TextView titleView = (TextView) view.findViewById(R.id.titleView);
-        titleView.setText(hunt.getTitle());
-
-        TextView numberOfLocationsView = (TextView) view.findViewById(R.id.numberOfLocationsView);
-
-        numberOfLocationsView.setText("Location " + (currentLocationNumber + 1) + " out of " + hunt.getLocations().size());
+        titleView.setText(hunt.getLocations().get(currentLocationNumber-1).getName());
 
         TextView descriptionView = (TextView) view.findViewById(R.id.descriptionView);
-        descriptionView.setText(hunt.getDescription());
+        descriptionView.setText(hunt.getLocations().get(currentLocationNumber-1).getDescription());
 
+    }
 
-
-        Button selectHuntButton = (Button) view.findViewById(R.id.getHintButton);
-
-        selectHuntButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MainActivity activity = (MainActivity) getActivity();
-                activity.hintLocation = hunt.getLocations().get(currentLocationNumber);
-                Toast.makeText(getActivity(), "A marker has been added.", Toast.LENGTH_LONG).show();
-
-            }
-        });
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -93,10 +71,6 @@ public class CurrentHuntFragment extends Fragment {
         MainActivity activity = (MainActivity) getActivity();
         hunt = activity.hunt;
         currentLocationNumber = activity.locationTracker;
-        return inflater.inflate(R.layout.fragment_current_hunt, container, false);
-    }
-
-    public interface OnFragmentInteractionListener{
-        void onFragmentInteraction(Hunt item);
+        return inflater.inflate(R.layout.fragment_found_location, container, false);
     }
 }

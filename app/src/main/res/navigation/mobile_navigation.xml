@@ -24,10 +24,21 @@
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
+        android:id="@+id/nav_found_location"
+        android:name="com.example.cloudproject.ui.hunt.FoundLocationFragment"
+        android:label="@string/menu_found_location"
+        tools:layout="@layout/fragment_found_location" />
+
+
+    <fragment
         android:id="@+id/nav_hunt"
         android:name="com.example.cloudproject.ui.hunt.CurrentHuntFragment"
         android:label="@string/menu_hunt"
-        tools:layout="@layout/fragment_current_hunt" />
+        tools:layout="@layout/fragment_current_hunt" >
+        <argument
+            android:name="hunt"
+            app:argType="com.example.cloudproject.models.Hunt" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_hunt_list"
@@ -47,5 +58,8 @@
         <argument
             android:name="hunt"
             app:argType="com.example.cloudproject.models.Hunt" />
+        <action
+            android:id="@+id/action_nav_hunt_information_to_nav_hunt"
+            app:destination="@id/nav_hunt" />
     </fragment>
 </navigation>

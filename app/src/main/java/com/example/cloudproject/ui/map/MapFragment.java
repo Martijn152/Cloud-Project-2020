@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.cloudproject.MainActivity;
 import com.example.cloudproject.models.Location;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -52,23 +53,15 @@ public class MapFragment extends Fragment {
             //Then display these
             googleMap = map;
 
-            ArrayList<Location> locationList = new ArrayList<Location>();
-            Location location1 = new Location(56.0299629,14.1501808, "Tivoli Badet", "A pool", "Martijn", "id1");
-            Location location2 = new Location(56.0285586,14.1469743, "Naturum Vattenriket", "A place", "Martijn", "id2");
-            Location location3 = new Location(56.0273787,14.153089, "Kristianstad Theater", "A theater", "Martijn", "id3");
-            Location location4 = new Location(56.0312172,14.1583827, "Systembolaget", "A liquor store", "Martijn", "id4");
-            Location location5 = new Location(56.0466502,14.1545984, "Pinocchio Pizzeria", "A pizzeria", "Martijn", "id5");
-            locationList.add(location1);
-            locationList.add(location2);
-            locationList.add(location3);
-            locationList.add(location4);
-            locationList.add(location5);
 
-            for (Location location: locationList
-                 ) {
+            MainActivity activity = (MainActivity) getActivity();
+            if(activity.hintLocation != null){
+                Location location = activity.hintLocation;
+
                 LatLng sydney = new LatLng(location.getLatitude(), location.getLongitude());
                 googleMap.addMarker(new MarkerOptions().position(sydney).title(location.getName()));
             }
+
 
             //Change this to the current location of the phone
             getLocationPermission();

@@ -18,6 +18,7 @@
     <string name="menu_personal">Personal</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_profile">Profile</string>
+    <string name="menu_found_location">Found location</string>
 
     <string name="home_second">Home Second</string>
 
@@ -27,7 +28,7 @@
 
 
     <string name="text_next_location">Next location:</string>
-
+    <string name="text_found_location">You have found:</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

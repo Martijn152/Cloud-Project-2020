@@ -4,6 +4,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="20dp"
     android:orientation="vertical"
     tools:context=".ui.hunt.HuntInformationFragment">
 
@@ -17,7 +18,7 @@
         android:id="@+id/titleView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/hello_blank_fragment"
+        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
@@ -26,12 +27,6 @@
         android:layout_height="wrap_content"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="#3F51B5" />
-
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/listDivider" />
 
     <TextView
         android:id="@+id/descriptionView"
