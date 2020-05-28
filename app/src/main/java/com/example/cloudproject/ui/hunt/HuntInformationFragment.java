@@ -1,14 +1,19 @@
 package com.example.cloudproject.ui.hunt;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.cloudproject.R;
+import com.example.cloudproject.models.Hunt;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,14 +21,12 @@ import com.example.cloudproject.R;
  * create an instance of this fragment.
  */
 public class HuntInformationFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
+
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private Hunt hunt;
+    private OnFragmentInteractionListener mListener;
 
     public HuntInformationFragment() {
         // Required empty public constructor
@@ -41,8 +44,6 @@ public class HuntInformationFragment extends Fragment {
     public static HuntInformationFragment newInstance(String param1, String param2) {
         HuntInformationFragment fragment = new HuntInformationFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,15 +52,52 @@ public class HuntInformationFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            hunt = HuntInformationFragmentArgs.fromBundle(getArguments()).getHunt();
+
         }
     }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        TextView titleView = (TextView) view.findViewById(R.id.titleView);
+        titleView.setText(hunt.getTitle());
+        TextView numberOfLocationsView = (TextView) view.findViewById(R.id.numberOfLocationsView);
+        numberOfLocationsView.setText(hunt.getLocations().size() + " locations");
+        TextView descriptionView = (TextView) view.findViewById(R.id.descriptionView);
+        descriptionView.setText(hunt.getDescription());
+
+        Button selectHuntButton = (Button) view.findViewById(R.id.selectHuntButton);
+        selectHuntButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mListener.onFragmentInteraction(hunt);
+            }
+        });
+
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListFragmentInteractionListener");
+        }
+    }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_hunt_information, container, false);
+    }
+
+    public interface OnFragmentInteractionListener{
+        void onFragmentInteraction(Hunt item);
     }
 }

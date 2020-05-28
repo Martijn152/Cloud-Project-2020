@@ -12,7 +12,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.cloudproject.models.Hunt;
+import com.example.cloudproject.ui.hunt.HuntInformationFragment;
 import com.example.cloudproject.ui.huntlist.HuntListFragment;
+import com.example.cloudproject.ui.huntlist.HuntListFragmentDirections;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 
@@ -27,7 +29,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity implements HuntListFragment.OnListFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements HuntListFragment.OnListFragmentInteractionListener, HuntInformationFragment.OnFragmentInteractionListener{
 
     private AppBarConfiguration mAppBarConfiguration;
     private static final int CAMERA_REQUEST = 1888;
@@ -115,8 +117,19 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
         //Do something with the item here
 
         //We want to open another fragment and pass the item to it, so it know what to display
-        //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        //navController.navigate(R.id.nav_map);
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.navigate(HuntListFragmentDirections.actionNavHuntListToNavHuntInformation(item));
+        //Navigate to the hunt information fragment
+        //Also pass the hunt to the other fragment
+
+    }
+
+    @Override
+    public void onFragmentInteraction(Hunt item) {
+        //This means that this hunt is now the current active hunt
+        //We should store this and display it in the current hunt fragment
+        //We should also store which location (as in 3 out of 5) the hunt is at
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
 
     }
 }

@@ -33,5 +33,19 @@
         android:id="@+id/nav_hunt_list"
         android:name="com.example.cloudproject.ui.huntlist.HuntListFragment"
         android:label="@string/menu_hunt_list"
-        tools:layout="@layout/fragment_hunt_list" />
+        tools:layout="@layout/fragment_hunt_list" >
+        <action
+            android:id="@+id/action_nav_hunt_list_to_nav_hunt_information"
+            app:destination="@id/nav_hunt_information" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_hunt_information"
+        android:name="com.example.cloudproject.ui.hunt.HuntInformationFragment"
+        android:label="@string/menu_hunt_information"
+        tools:layout="@layout/fragment_hunt_information" >
+        <argument
+            android:name="hunt"
+            app:argType="com.example.cloudproject.models.Hunt" />
+    </fragment>
 </navigation>
