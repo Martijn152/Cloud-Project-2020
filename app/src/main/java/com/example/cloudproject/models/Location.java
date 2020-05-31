@@ -8,6 +8,7 @@ public class Location {
     private String owner;
     private String photo;
 
+    //Constructor to use when creating fully fledged location objects
     public Location(double latitude, double longitude, String name, String description, String owner, String photo) {
         this.latitude = latitude;
         this.longitude = longitude;
@@ -15,6 +16,11 @@ public class Location {
         this.description = description;
         this.owner = owner;
         this.photo = photo;
+    }
+
+    //Constructor to use when just getting hunts and needing to populate the location list
+    public Location(String placeholder) {
+        this.name = placeholder;
     }
 
     public double getLatitude() {

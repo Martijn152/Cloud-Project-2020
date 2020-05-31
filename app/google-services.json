@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "547568656781",
+    "firebase_url": "https://ageless-lamp-278509.firebaseio.com",
+    "project_id": "ageless-lamp-278509",
+    "storage_bucket": "ageless-lamp-278509.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547568656781:android:7e6009ca04cf7fe5595dc4",
+        "android_client_info": {
+          "package_name": "com.example.cloudproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "547568656781-pa5i97pcjl4d740qmis5mo4u0m1ab0gi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDTwWwX2253Jb7MD9sehcmaLSO_40k-W4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547568656781-pa5i97pcjl4d740qmis5mo4u0m1ab0gi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

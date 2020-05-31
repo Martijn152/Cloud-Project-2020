@@ -1,24 +1,28 @@
 package com.example.cloudproject.ui.hunt;
 
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.cloudproject.MainActivity;
 import com.example.cloudproject.R;
 import com.example.cloudproject.models.Hunt;
-import com.example.cloudproject.models.Location;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.ArrayList;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -67,9 +71,25 @@ public class CurrentHuntFragment extends Fragment {
 
         numberOfLocationsView.setText("Location " + (currentLocationNumber + 1) + " out of " + hunt.getLocations().size());
 
+        if(!hunt.getLocations().isEmpty()){
+
+            // Reference to an image file in Cloud Storage
+            StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(hunt.getLocations().get(currentLocationNumber).getPhoto());
+            final ImageView image = (ImageView) view.findViewById(R.id.nextLocationImageView);
+
+            final long ONE_MEGABYTE = 1024 * 1024 * 10;
+            storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    image.setImageBitmap(bmp);
+                }
+            });
+        }
+
+
         TextView descriptionView = (TextView) view.findViewById(R.id.descriptionView);
         descriptionView.setText(hunt.getDescription());
-
 
 
         Button selectHuntButton = (Button) view.findViewById(R.id.getHintButton);
@@ -96,7 +116,9 @@ public class CurrentHuntFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_current_hunt, container, false);
     }
 
-    public interface OnFragmentInteractionListener{
+    public interface OnFragmentInteractionListener {
         void onFragmentInteraction(Hunt item);
     }
 }
+
+

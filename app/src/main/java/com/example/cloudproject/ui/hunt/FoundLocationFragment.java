@@ -1,5 +1,7 @@
 package com.example.cloudproject.ui.hunt;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -9,11 +11,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.cloudproject.MainActivity;
 import com.example.cloudproject.R;
 import com.example.cloudproject.models.Hunt;
+import com.example.cloudproject.models.Location;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,11 +62,36 @@ public class FoundLocationFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         TextView titleView = (TextView) view.findViewById(R.id.titleView);
-        titleView.setText(hunt.getLocations().get(currentLocationNumber-1).getName());
+        titleView.setText(hunt.getLocations().get(currentLocationNumber).getName());
 
         TextView descriptionView = (TextView) view.findViewById(R.id.descriptionView);
-        descriptionView.setText(hunt.getLocations().get(currentLocationNumber-1).getDescription());
+        descriptionView.setText(hunt.getLocations().get(currentLocationNumber).getDescription());
 
+        // Reference to an image file in Cloud Storage
+        StorageReference storageReference = FirebaseStorage.getInstance().getReferenceFromUrl(hunt.getLocations().get(currentLocationNumber).getPhoto());
+        final ImageView image = (ImageView) view.findViewById(R.id.locationPhotoView);
+
+        final long ONE_MEGABYTE = 1024 * 1024 * 10;
+        storageReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                image.setImageBitmap(bmp);
+            }
+        });
+
+
+        MainActivity activity = (MainActivity) getActivity();
+        activity.locationTracker++;
+
+        if(activity.finished){
+            Toast.makeText(getActivity(), "You've finished the hunt!", Toast.LENGTH_LONG).show();
+
+            //The app should stop looking for the goal location now
+
+            activity.hunt = new Hunt("You have no hunt selected!", "", "", "", new ArrayList<Location>());
+            activity.locationTracker = 0;
+        }
     }
 
     @Override

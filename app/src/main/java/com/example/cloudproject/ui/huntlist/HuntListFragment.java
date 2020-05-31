@@ -3,20 +3,32 @@ package com.example.cloudproject.ui.huntlist;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.cloudproject.R;
 import com.example.cloudproject.models.Hunt;
+import com.example.cloudproject.models.Location;
 import com.example.cloudproject.ui.huntlist.dummy.HuntContent;
+import com.example.cloudproject.utils.DatabaseHandler;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * A fragment representing a list of Items.
@@ -72,7 +84,52 @@ public class HuntListFragment extends Fragment {
             } else {
                 recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
             }
-            recyclerView.setAdapter(new MyHuntRecyclerViewAdapter(HuntContent.ITEMS, mListener));
+
+            //First use empty list
+            //Then use onCompleteListener for database access
+            //When that is done call notifyDataSetChanged()
+            final List<Hunt> hunts = new ArrayList<>();
+
+
+            final MyHuntRecyclerViewAdapter adapter = new MyHuntRecyclerViewAdapter(hunts, mListener);
+            recyclerView.setAdapter(adapter);
+
+            DatabaseHandler.getInstance().db.collection("hunts")
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+
+                                    //Getting the values from the document
+                                    String title = document.getId();
+                                    String area = document.getString("area");
+                                    String description = document.getString("description");
+                                    ArrayList<DocumentReference> locations = (ArrayList<DocumentReference>) document.get("locations");
+                                    DocumentReference owner = document.getDocumentReference("owner");
+
+                                    ArrayList<Location> locationsList = new ArrayList<Location>();
+                                    for (DocumentReference location : locations
+                                    ) {
+                                        Location newLocation = new Location(location.getId());
+                                        locationsList.add(newLocation);
+                                    }
+
+                                    //Creating a new hunt with those values
+                                    Hunt hunt = new Hunt(title, description, area, owner.getId(), locationsList);
+
+                                    hunts.add(hunt);
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                            } else {
+                                Log.w(TAG, "Error getting documents.", task.getException());
+                            }
+                        }
+                    });
+
         }
         return view;
     }

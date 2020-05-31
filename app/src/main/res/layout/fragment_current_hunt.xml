@@ -19,7 +19,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/nextLocationImageView"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         tools:src="@tools:sample/backgrounds/scenic" />

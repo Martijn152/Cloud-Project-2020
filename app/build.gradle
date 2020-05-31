@@ -20,10 +20,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
+    }
 
 }
 
 apply plugin: "androidx.navigation.safeargs"
+apply plugin: 'com.google.gms.google-services'  // Google Services plugin
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -41,4 +46,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.2'
+    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+    implementation 'com.firebaseui:firebase-ui-storage:6.2.0'
+
 }

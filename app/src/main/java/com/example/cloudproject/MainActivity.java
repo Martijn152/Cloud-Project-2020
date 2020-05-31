@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.example.cloudproject.ui.hunt.HuntInformationFragment;
 import com.example.cloudproject.ui.hunt.HuntInformationFragmentDirections;
 import com.example.cloudproject.ui.huntlist.HuntListFragment;
 import com.example.cloudproject.ui.huntlist.HuntListFragmentDirections;
+import com.example.cloudproject.utils.DatabaseHandler;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -27,6 +29,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -40,12 +45,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-public class MainActivity extends AppCompatActivity implements HuntListFragment.OnListFragmentInteractionListener, HuntInformationFragment.OnFragmentInteractionListener{
+import static android.content.ContentValues.TAG;
+
+public class MainActivity extends AppCompatActivity implements HuntListFragment.OnListFragmentInteractionListener, HuntInformationFragment.OnFragmentInteractionListener {
 
     private AppBarConfiguration mAppBarConfiguration;
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    public Hunt hunt = new Hunt("You have no hunt selected!","","","",new ArrayList<Location>());
+    public Hunt hunt = new Hunt("You have no hunt selected!", "", "", "", new ArrayList<Location>());
     public int locationTracker = 0;
     android.location.Location mCurrentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -53,10 +60,14 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
     private LocationRequest locationRequest;
     private NavController navController;
     public Location hintLocation;
+    public boolean finished = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        DatabaseHandler db = DatabaseHandler.getInstance();
+        db.getHunts();
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fusedLocationProviderClient.getLastLocation()
@@ -84,40 +95,100 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
                     System.out.println("Current location");
                     System.out.println("Lat: " + location.getLatitude());
                     System.out.println("Long: " + location.getLongitude());
-                    if(!hunt.getLocations().isEmpty()){
-                        //Compare here
 
-                        android.location.Location goalLocation = new android.location.Location(location);
-                        goalLocation.setLatitude(hunt.getLocations().get(locationTracker).getLatitude());
-                        goalLocation.setLongitude(hunt.getLocations().get(locationTracker).getLongitude());
 
-                        System.out.println("Goal location");
-                        System.out.println("Lat: " + goalLocation.getLatitude());
-                        System.out.println("Long: " + goalLocation.getLongitude());
+                    if (!hunt.getLocations().isEmpty()) {
 
-                        System.out.println("Distance:");
 
-                        float distance = location.distanceTo(goalLocation);
-                        System.out.println(distance);
+                        //Then check if the hunt is already completed or not
+                        if (locationTracker < hunt.getLocations().size() - 1) {
 
-                        if(distance<10.0){
-                            //This means the user found the location
-                            if(locationTracker<hunt.getLocations().size()){
-                                locationTracker++;
+                            //Compare here
+                            android.location.Location goalLocation = new android.location.Location(location);
+                            goalLocation.setLatitude(hunt.getLocations().get(locationTracker).getLatitude());
+                            goalLocation.setLongitude(hunt.getLocations().get(locationTracker).getLongitude());
+
+                            System.out.println("Goal location");
+                            System.out.println("Lat: " + goalLocation.getLatitude());
+                            System.out.println("Long: " + goalLocation.getLongitude());
+
+                            System.out.println("Distance:");
+
+                            float distance = location.distanceTo(goalLocation);
+                            System.out.println(distance);
+
+                            //Then check for distance being less than this value
+                            if (distance < 20.0) {
+                                //This means the user found the location
+
+                                Toast.makeText(getApplicationContext(), "You've found the location!", Toast.LENGTH_LONG).show();
+
+                                //Load the next location
+                                FirebaseFirestore db = DatabaseHandler.getInstance().db;
+
+                                DocumentReference docRef = db.collection("locations").document(hunt.getLocations().get(locationTracker + 1).getName());
+                                docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        Log.d(TAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
+
+                                        //If it is successful, increase the counter
+                                        System.out.println(hunt.getLocations().get(locationTracker + 1).getName());
+
+                                        String name = documentSnapshot.getId();
+                                        String description = (String) documentSnapshot.get("description");
+                                        double latitude = documentSnapshot.getGeoPoint("location").getLatitude();
+                                        double longitude = documentSnapshot.getGeoPoint("location").getLongitude();
+                                        String owner = documentSnapshot.getDocumentReference("owner").getId();
+                                        String photo = documentSnapshot.getString("photo");
+
+                                        System.out.println(name);
+                                        System.out.println(description);
+                                        System.out.println(latitude);
+                                        System.out.println(longitude);
+                                        System.out.println(owner);
+                                        System.out.println(photo);
+
+                                        Location location = new Location(latitude, longitude, name, description, owner, photo);
+
+                                        hunt.getLocations().set(locationTracker + 1, location);
+
+
+                                        //Show the details for the found location
+                                        //Title, description, photo
+                                        navController.navigate(R.id.nav_found_location);
+                                    }
+                                });
+                            }
+                        } else if (locationTracker < hunt.getLocations().size()) {
+                            //In this case we still want to check, just not load the next one
+                            //Then check for distance being less than this value
+
+                            //Compare here
+                            android.location.Location goalLocation = new android.location.Location(location);
+                            goalLocation.setLatitude(hunt.getLocations().get(locationTracker).getLatitude());
+                            goalLocation.setLongitude(hunt.getLocations().get(locationTracker).getLongitude());
+
+                            System.out.println("Goal location");
+                            System.out.println("Lat: " + goalLocation.getLatitude());
+                            System.out.println("Long: " + goalLocation.getLongitude());
+
+                            System.out.println("Distance:");
+
+                            float distance = location.distanceTo(goalLocation);
+                            System.out.println(distance);
+
+
+                            if (distance < 20.0) {
+                                //This means the user found the location
+
                                 Toast.makeText(getApplicationContext(), "You've found the location!", Toast.LENGTH_LONG).show();
                                 //Show the details for the found location
                                 //Title, description, photo
+                                finished = true;
                                 navController.navigate(R.id.nav_found_location);
-
-                            }else{
-                                Toast.makeText(getApplicationContext(), "You've finished the hunt!", Toast.LENGTH_LONG).show();
-                                //The app should stop looking for the goal location now
                             }
-
                         }
-
-
-
                     }
                 }
             }
@@ -214,23 +285,53 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
     @Override
     public void onListFragmentInteraction(Hunt item) {
         //Do something with the item here
-
-        //We want to open another fragment and pass the item to it, so it know what to display
         navController.navigate(HuntListFragmentDirections.actionNavHuntListToNavHuntInformation(item));
+        //We want to open another fragment and pass the item to it, so it know what to display
         //Navigate to the hunt information fragment
         //Also pass the hunt to the other fragment
     }
 
     @Override
-    public void onFragmentInteraction(Hunt item) {
+    public void onFragmentInteraction(final Hunt item) {
         //This means that this hunt is now the current active hunt
         //We should store this and display it in the current hunt fragment
         //We should also store which location (as in 3 out of 5) the hunt is at
+        finished = false;
         hunt = item;
         locationTracker = 0;
-        navController.navigate(HuntInformationFragmentDirections.actionNavHuntInformationToNavHunt(item));
+        FirebaseFirestore db = DatabaseHandler.getInstance().db;
 
+        //Get the first location from the database
+        DocumentReference docRef = db.collection("locations").document(item.getLocations().get(0).getName());
+        docRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                Log.d(TAG, documentSnapshot.getId() + " => " + documentSnapshot.getData());
 
+                //If it is successful, increase the counter
+                System.out.println(item.getLocations().get(0).getName());
+
+                String name = documentSnapshot.getId();
+                String description = (String) documentSnapshot.get("description");
+                double latitude = documentSnapshot.getGeoPoint("location").getLatitude();
+                double longitude = documentSnapshot.getGeoPoint("location").getLongitude();
+                String owner = documentSnapshot.getDocumentReference("owner").getId();
+                String photo = documentSnapshot.getString("photo");
+
+                System.out.println(name);
+                System.out.println(description);
+                System.out.println(latitude);
+                System.out.println(longitude);
+                System.out.println(owner);
+                System.out.println(photo);
+
+                Location location = new Location(latitude, longitude, name, description, owner, photo);
+
+                item.getLocations().set(0, location);
+                hunt = item;
+                navController.navigate(HuntInformationFragmentDirections.actionNavHuntInformationToNavHunt(item));
+            }
+        });
     }
 }
 
