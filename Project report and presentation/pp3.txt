@@ -1,0 +1,41 @@
+Mobile application:
+- login
+- ui (map, browse hunts/tours, add locations, camera intergration)
+- profile / user settings
+- cloud
+
+Database:
+- tables
+- details of hunts
+- photos (blobs?  Reference to a photo?)
+- user information (profile, settings)
+
+Website:
+- login
+- ui (map, browse hunts/tours, add locations, camera intergration)
+- profile / user settings
+- cloud
+
+Cloud setup:
+- Google Cloud platform
+- use Cloud platform
+- Cloud tools for Visual Studio
+
+Account creation and login: 
+- account stored in the database
+- available on mobile and web app
+- different roles: user and admin
+- admin can delete inappropriate photos 
+
+GPS:
+- used on mobile and web
+
+Security:
+- sanitise inputs
+- encrypt user info in database
+
+
+
+
+Future plan:
+ 
