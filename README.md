@@ -2,14 +2,31 @@
 
 
 
-### To-Do List
-- Research map fragments
-- Research map for web
+# To-Do List
+
+
+
+## Android App
 - Design login and signup
-- Implement database in cloud
-- Finish database design
-- Look into the camera function Android
-- Look into storing photographs
+- Finish camera function
+### Optional
+- Gallery
+- Store completed hunts
+- Profile
+- Settings
+
+## Website
+- Design login and signup
+- Research map for web
+- List locations
+- Create hunts
+- List hunts
+### Admin
+- Delete/edit locations
+- Delete/edit hunts
+
+
+
 
 
 
