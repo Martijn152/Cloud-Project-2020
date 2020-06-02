@@ -7,16 +7,14 @@
 
 
 ## Android App
-- Design login and signup
-- Finish camera function
 ### Optional
-- Gallery
+- Gallery of locations
 - Store completed hunts
 - Profile
 - Settings
 
 ## Website
-- Design login and signup
+- Connect login and signup to database
 - Research map for web
 - List locations
 - Create hunts
