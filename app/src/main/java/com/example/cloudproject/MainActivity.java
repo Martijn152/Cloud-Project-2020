@@ -10,7 +10,9 @@ import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.cloudproject.models.Hunt;
@@ -29,6 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -52,19 +55,23 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
     private AppBarConfiguration mAppBarConfiguration;
     private static final int CAMERA_REQUEST = 1888;
     private static final int MY_CAMERA_PERMISSION_CODE = 100;
-    public Hunt hunt = new Hunt("You have no hunt selected!", "", "", "", new ArrayList<Location>());
+    public Hunt hunt;
     public int locationTracker = 0;
-    android.location.Location mCurrentLocation;
+    public android.location.Location mCurrentLocation;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
     private NavController navController;
     public Location hintLocation;
     public boolean finished = false;
+    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+    public Bitmap photo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        hunt = new Hunt("You have no hunt selected!", "", "", "", new ArrayList<Location>());
 
         DatabaseHandler db = DatabaseHandler.getInstance();
         db.getHunts();
@@ -227,6 +234,15 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+
+
+        View headerView = navigationView.getHeaderView(0);
+        TextView emailView = headerView.findViewById(R.id.nav_header_title);
+        emailView.setText(mAuth.getCurrentUser().getEmail());
+        TextView usernameView = headerView.findViewById(R.id.nav_header_subtitle);
+        usernameView.setText(mAuth.getCurrentUser().getDisplayName());
+
+
     }
 
     protected void createLocationRequest() {
@@ -246,8 +262,11 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            Bitmap photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+            photo = (Bitmap) Objects.requireNonNull(data.getExtras()).get("data");
+            // Here we should open a new fragment for entering the other data of the location
+            // It should display the photo and allow the user to add the location to the database
             // imageView.setImageBitmap(photo);
+            navController.navigate(R.id.nav_new_location);
 
         }
     }
@@ -258,11 +277,10 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == MY_CAMERA_PERMISSION_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show();
                 Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, CAMERA_REQUEST);
             } else {
-                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Camera permission denied.", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -279,6 +297,25 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            MainActivity.this.finish();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 

@@ -29,6 +29,11 @@
         android:label="@string/menu_found_location"
         tools:layout="@layout/fragment_found_location" />
 
+    <fragment
+        android:id="@+id/nav_new_location"
+        android:name="com.example.cloudproject.ui.newlocation.NewLocationFragment"
+        android:label="@string/menu_new_location"
+        tools:layout="@layout/fragment_new_location" />
 
     <fragment
         android:id="@+id/nav_hunt"

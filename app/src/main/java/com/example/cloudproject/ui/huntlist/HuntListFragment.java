@@ -102,13 +102,12 @@ public class HuntListFragment extends Fragment {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
-
                                     //Getting the values from the document
                                     String title = document.getId();
                                     String area = document.getString("area");
                                     String description = document.getString("description");
                                     ArrayList<DocumentReference> locations = (ArrayList<DocumentReference>) document.get("locations");
-                                    DocumentReference owner = document.getDocumentReference("owner");
+                                    String owner = document.getString("owner");
 
                                     ArrayList<Location> locationsList = new ArrayList<Location>();
                                     for (DocumentReference location : locations
@@ -118,7 +117,7 @@ public class HuntListFragment extends Fragment {
                                     }
 
                                     //Creating a new hunt with those values
-                                    Hunt hunt = new Hunt(title, description, area, owner.getId(), locationsList);
+                                    Hunt hunt = new Hunt(title, description, area, owner, locationsList);
 
                                     hunts.add(hunt);
                                     adapter.notifyDataSetChanged();
