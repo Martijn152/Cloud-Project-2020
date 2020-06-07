@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements HuntListFragment.
                 String description = (String) documentSnapshot.get("description");
                 double latitude = documentSnapshot.getGeoPoint("location").getLatitude();
                 double longitude = documentSnapshot.getGeoPoint("location").getLongitude();
-                String owner = documentSnapshot.getDocumentReference("owner").getId();
+                String owner = documentSnapshot.getString("owner");
                 String photo = documentSnapshot.getString("photo");
 
                 System.out.println(name);

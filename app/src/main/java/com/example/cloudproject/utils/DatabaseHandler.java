@@ -57,7 +57,7 @@ public class DatabaseHandler {
                                 String area = document.getString("area");
                                 String description = document.getString("description");
                                 ArrayList<DocumentReference> locations = (ArrayList<DocumentReference>) document.get("locations");
-                                DocumentReference owner = document.getDocumentReference("owner");
+                                String owner = document.getString("owner");
 
                                 ArrayList<Location> locationsList = new ArrayList<Location>();
                                 for (DocumentReference location : locations
@@ -67,7 +67,7 @@ public class DatabaseHandler {
                                 }
 
                                 //Creating a new hunt with those values
-                                Hunt hunt = new Hunt(title, description, area, owner.getId(), locationsList);
+                                Hunt hunt = new Hunt(title, description, area, owner, locationsList);
 
                                 list.add(hunt);
                             }
