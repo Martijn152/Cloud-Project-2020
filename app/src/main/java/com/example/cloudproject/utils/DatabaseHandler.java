@@ -37,9 +37,6 @@ public class DatabaseHandler {
 
     public ArrayList<Hunt> getHunts(){
 
-
-
-
         db.collection("hunts")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
